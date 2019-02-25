@@ -4,13 +4,19 @@ public protocol CommentsAssembly: class {
     func createComments(memeId: String) -> PresentationViewModule<CommentsModule>
 }
 
-final public class CommentsAssemblyImpl: Assembly, CommentsAssembly {
+final public class CommentsAssemblyImpl: CommentsAssembly {
+    let commentService: CommentsService
+    
+    init(commentService: CommentsService) {
+        self.commentService = commentService
+    }
+    
     // MARK: - FeedAssembly
     public func createComments(memeId: String) -> PresentationViewModule<CommentsModule> {
         
         let presenter = CommentsPresenter(
             memeId: memeId,
-            сommentsService:serviceFactory.commentsService()
+            сommentsService:self.commentService
         )
         
         let viewController = CommentsViewController(
@@ -19,8 +25,7 @@ final public class CommentsAssemblyImpl: Assembly, CommentsAssembly {
         
         presenter.view = viewController
         presenter.router = CommentsRouterImpl(
-            rootViewController: viewController,
-            moduleFactory: moduleFactory
+            rootViewController: viewController
         )
         
         return PresentationViewModule(

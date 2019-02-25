@@ -1,26 +1,18 @@
 import UIKit
+import Dip
 
 final class Application {
     // MARK: - Private properties
     private let window = UIWindow()
-    private let serviceFactory: ServiceFactory
-    private let moduleFactory: ModuleFactory
-    private let pushNotificationHandler: PushNotificationHandler
+    lazy private var pushNotificationHandler: PushNotificationHandler = {
+        return try! container.resolve()
+    }()
+    let container: DependencyContainer
     
     // MARK: - Init
     init() {
-        self.serviceFactory = ServiceFactory()
-        self.moduleFactory = ModuleFactoryImpl(
-            serviceFactory: serviceFactory
-        )
-        self.pushNotificationHandler = PushNotificationHandlerImpl(
-            deepLinkHandler: DeepLinkHandlerImpl(
-                applicationRouterProvider: ApplicationRouterProviderImpl(
-                    moduleFactory: moduleFactory,
-                    topViewControllerProvider: TopViewControllerProviderImpl()
-                )
-            )
-        )
+        self.container = DIContainer.container()
+        try! self.container.bootstrap()
     }
     
     // MARK: - Public
@@ -31,7 +23,7 @@ final class Application {
     }
     
     func start() {
-        let rootModule = self.moduleFactory.rootAssembly()
+        let rootModule = try! container.resolve() as RootAssembly
         window.rootViewController = rootModule.create().view
         window.makeKeyAndVisible()
     }

@@ -4,11 +4,20 @@ public protocol FeedAssembly: class {
     func createFeed(settings: FeedViewControllerSettings) -> PresentationViewModule<FeedModule>
 }
 
-final public class FeedAssemblyImpl: Assembly, FeedAssembly {
+final public class FeedAssemblyImpl: FeedAssembly {
+    let feedService: FeedService
+    let commentsAssembly: CommentsAssembly
+    
+    
+    init(feedService: FeedService, commentsAssembly: CommentsAssembly) {
+        self.feedService = feedService
+        self.commentsAssembly = commentsAssembly
+    }
+    
     // MARK: - FeedAssembly
     public func createFeed(settings: FeedViewControllerSettings) -> PresentationViewModule<FeedModule> {
         let presenter = FeedPresenter(
-            feedService:serviceFactory.feedService()
+            feedService:feedService
         )
         
         let viewController = FeedViewController(
@@ -18,8 +27,8 @@ final public class FeedAssemblyImpl: Assembly, FeedAssembly {
         
         presenter.view = viewController
         presenter.router = FeedRouterImpl(
-            rootViewController: viewController,
-            moduleFactory: moduleFactory
+            commentsAssembly: commentsAssembly,
+            rootViewController: viewController
         )
         
         return PresentationViewModule(

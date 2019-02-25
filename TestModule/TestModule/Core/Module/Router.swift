@@ -20,13 +20,9 @@ public class BaseRouter {
     // MARK: - Private properties
     private weak var rootViewController: UIViewController?
     
-    // MARK: - Public properties
-    public let moduleFactory: ModuleFactory
-    
     // MARK: - Init
-    public init(rootViewController: UIViewController?, moduleFactory: ModuleFactory) {
+    public init(rootViewController: UIViewController?) {
         self.rootViewController = rootViewController
-        self.moduleFactory = moduleFactory
     }
     
     // MARK: - Public

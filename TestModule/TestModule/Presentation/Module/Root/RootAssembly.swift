@@ -4,9 +4,15 @@ public protocol RootAssembly: class {
     func create() -> ViewModule
 }
 
-final public class RootAssemblyImpl: Assembly, RootAssembly {
+final public class RootAssemblyImpl: RootAssembly {
+    let feedAssembly: FeedAssembly
+    
+    init(feedAssembly: FeedAssembly) {
+        self.feedAssembly = feedAssembly
+    }
+    
     public func create() -> ViewModule {
-        let feedModule = moduleFactory.feedAssembly().createFeed(
+        let feedModule = feedAssembly.createFeed(
             settings: FeedViewControllerSettings(
                 navigationItemStyle: .none
             )

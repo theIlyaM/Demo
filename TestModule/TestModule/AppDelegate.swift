@@ -16,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         app.prepare()
         app.start()
         
+        let testObject = try! app.container.resolve() as TestObjectiveClass
+        testObject.testMethod()
+        
         return true
     }
     

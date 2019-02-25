@@ -11,18 +11,18 @@ public enum DeepLink {
 
 final public class DeepLinkHandlerImpl: DeepLinkHandler {
     // MARK: - Private properties
-    private let applicationRouterProvider: ApplicationRouterProvider
+    private let rootRouter: RootRouter
     
     // MARK: - Init
-    public init(applicationRouterProvider: ApplicationRouterProvider) {
-        self.applicationRouterProvider = applicationRouterProvider
+    public init(rootRouter: RootRouter) {
+        self.rootRouter = rootRouter
     }
     
     // MARK: - DeepLinkHandler
     public func handleDeepLink(rawValue: String, completion:Closure.Argument<Bool>?) {
         switch parseDeepLink(rawValue: rawValue) {
         case .feed:
-            applicationRouterProvider.rootRouter?.showFeed(presentationStyle: .modal)
+            self.rootRouter.showFeed(presentationStyle: .modal)
         case .unknown:
             break
         }
