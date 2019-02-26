@@ -5,9 +5,15 @@ public protocol RootRouter: Router {
 }
 
 final public class RootRouterImpl: BaseRouter, RootRouter {
+    let feedAssembly: FeedAssembly
+    
+    init(feedAssembly: FeedAssembly, topViewControllerProvider: TopViewControllerProvider) {
+        self.feedAssembly = feedAssembly
+        super.init(rootViewController: topViewControllerProvider.topViewController())
+    }
+    
     // MARK: - RootRouter
     public func showFeed(presentationStyle: RouterPresentationStyle) {
-        let feedAssembly = moduleFactory.feedAssembly()
         let feedModule = feedAssembly.createFeed(
             settings: FeedViewControllerSettings(
                 navigationItemStyle: navigationItemStyle(
